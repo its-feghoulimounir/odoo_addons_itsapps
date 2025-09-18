@@ -1,6 +1,6 @@
 <section class="oe_container">
   <div class="oe_row oe_spaced">
-    <h2 class="oe_slogan">Pricelist Customers Smart Button — Odoo 18</h2>
+    <h2 class="oe_slogan">Pricelist Customers Smart Button — Odoo 17</h2>
     <p>
       Ajoute un bouton <strong>Clients</strong> sur les listes de prix pour ouvrir, en un clic,
       les partenaires <em>réellement</em> concernés, en filtrant les contacts enfants et en respectant le multi-sociétés.
@@ -23,6 +23,17 @@
       <li><em>Adresses d’expédition/facturation</em> : jamais affichées.</li>
     </ul>
 
+    <h3>Notes techniques</h3>
+    <ul>
+      <li>Lecture des LP via <code>ir.property('property_product_pricelist')</code>, agrégation par <code>commercial_partner_id</code>.</li>
+      <li>Contrôle d’activité via <code>sale.order</code> (état ≠ <code>cancel</code>) et présence d’au moins une <code>sale.order.line</code>.</li>
+    </ul>
+
+    <h3>Installation</h3>
+    <ol>
+      <li>Copier le module dans vos addons custom.</li>
+      <li>Mettre à jour la liste des Apps et installer.</li>
+    </ol>
   </div>
 
 
@@ -47,4 +58,3 @@
   </div>
 
 </section>
-
