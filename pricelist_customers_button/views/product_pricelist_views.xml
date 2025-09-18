@@ -1,0 +1,50 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+
+    <record id="action_pricelist_customers" model="ir.actions.act_window">
+    <field name="name">Clients</field>
+    <field name="res_model">res.partner</field>
+    <field name="view_mode">kanban,list,form</field>
+    <field name="context">{'active_model': 'product.pricelist'}</field>
+    <field name="domain">[
+      ('active','=',True),
+      ('customer_rank','>',0),
+      '|', ('parent_id','=',False), ('is_company','=',True),
+      '|',
+        ('specific_property_product_pricelist','=', context.get('pricelist_id') or context.get('active_id')),
+        '&amp;', ('specific_property_product_pricelist','=', False),
+               ('property_product_pricelist','=', context.get('pricelist_id') or context.get('active_id'))
+    ]</field>
+    <field name="target">current</field>
+  </record>
+
+     <record id="product_pricelist_tree_inherit_pricelist_customers_button" model="ir.ui.view">
+        <field name="name">product.pricelist.tree.inherit.pricelist.customers.button</field>
+        <field name="model">product.pricelist</field>
+        <field name="inherit_id" ref="product.product_pricelist_view_tree"/>
+        <field name="arch" type="xml">
+            <!-- Place the button at the very end of the row -->
+            <xpath expr="//list/*[last()]" position="after">
+                <button name="action_open_customers" type="object" string="Clients" icon="fa-users" class="btn-link"/>
+            </xpath>
+        </field>
+    </record>
+
+                                <!-- Smart button on pricelist form (standard with icon) -->
+    <record id="product_pricelist_form_inherit_pricelist_customers_button" model="ir.ui.view">
+        <field name="name">product.pricelist.form.inherit.pricelist.customers.button</field>
+        <field name="model">product.pricelist</field>
+        <field name="inherit_id" ref="product.product_pricelist_view"/>
+        <field name="arch" type="xml">
+            <!-- Insert stat button right after the title inside <sheet> -->
+            <xpath expr="//sheet/div[hasclass('oe_title')]" position="after">
+                <div class="oe_button_box" name="button_box">
+                    <button name="action_open_customers" type="object" class="oe_stat_button" icon="fa-users">
+                        <field name="customers_count" widget="statinfo" string="Clients"/>
+                    </button>
+                </div>
+            </xpath>
+        </field>
+    </record>
+
+</odoo>
