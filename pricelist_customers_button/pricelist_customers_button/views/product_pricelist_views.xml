@@ -1,0 +1,36 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<odoo>
+    <!-- FORM: smart button sans help -->
+    <record id="view_pricelist_form_inherit_customers_button_exact" model="ir.ui.view">
+        <field name="name">product.pricelist.form.customers.button.exact</field>
+        <field name="model">product.pricelist</field>
+        <field name="inherit_id" ref="product.product_pricelist_view"/>
+        <field name="arch" type="xml">
+            <xpath expr="//sheet/div[@class='oe_title']" position="after">
+                <div class="oe_button_box" name="button_box">
+                    <button name="action_view_customers"
+                            type="object"
+                            class="oe_stat_button"
+                            icon="fa-users">
+                        <field name="customers_count" widget="statinfo" string="Clients"/>
+                    </button>
+                </div>
+            </xpath>
+        </field>
+    </record>
+
+    <!-- TREE: retirer la colonne compteur et garder un bouton sans help -->
+    <record id="view_pricelist_tree_inherit_customers_button_exact" model="ir.ui.view">
+        <field name="name">product.pricelist.tree.customers.button.exact</field>
+        <field name="model">product.pricelist</field>
+        <field name="inherit_id" ref="product.product_pricelist_view_tree"/>
+        <field name="arch" type="xml">
+            <xpath expr="//tree" position="inside">
+                <button name="action_view_customers"
+                        type="object"
+                        icon="fa-users"
+                        string="Clients"/>
+            </xpath>
+        </field>
+    </record>
+</odoo>
