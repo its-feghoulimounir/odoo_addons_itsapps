@@ -88,35 +88,3 @@ class ProductPricelist(models.Model):
         action["context"] = ctx
         action["name"] = f"Clients — {self.display_name}"
         return action
-        try:
-            from lxml import etree
-            arch = res.get("arch") or ""
-            if not arch:
-                return res
-            root = etree.fromstring(arch.encode("utf-8"))
-            if root.tag not in ("list", "tree"):
-                return res
-            # don't duplicate
-            if root.xpath(".//button[@name='action_open_customers']"):
-                res["arch"] = etree.tostring(root, encoding="unicode")
-                return res
-            # create the button (standard Odoo style)
-            btn = etree.Element("button", {
-                "name": "action_open_customers",
-                "type": "object",
-                "string": "Clients",
-                "class": "btn-link",
-                "icon": "fa-user",
-            })
-            # place after the 'name' column if present
-            anchor = root.xpath(".//field[@name='name']")
-            if anchor:
-                idx = root.index(anchor[0])
-                root.insert(idx + 1, btn)
-            else:
-                root.append(btn)
-            res["arch"] = etree.tostring(root, encoding="unicode")
-        except Exception:
-            # if anything fails, keep original view
-            return res
-        return res
