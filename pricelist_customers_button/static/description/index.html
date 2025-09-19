@@ -6,24 +6,34 @@
       les partenaires <em>réellement</em> concernés, en filtrant les contacts enfants et en respectant le multi-sociétés.
     </p>
 
-    <h3>Fonctionnalités clés</h3>
-    <ul>
-      <li><strong>Bouton Clients</strong> dans la vue formulaire (smart button).</li>
-      <li><strong>Bouton Clients</strong> par ligne en vue liste.</li>
-      <li><strong>Affectations explicites</strong> via <code>property_product_pricelist</code> uniquement.</li>
-      <li><strong>Filtrage par entité commerciale</strong> (commercial partner) : jamais d’adresses/contacts enfants.</li>
-      <li><strong>Multi-sociétés</strong> : prises en compte des ventes de la société de la LP si définie.</li>
-    </ul>
 
-    <h3>Règles d’affichage</h3>
+      <h3>Règles d’affichage</h3>
+<ul>
+  <li><em>Actifs & clients</em> : uniquement les partenaires <code>active=True</code> avec <code>customer_rank &gt; 0</code>.</li>
+  <li><em>Niveau affiché</em> : uniquement les <strong>sociétés</strong> (<code>is_company=True</code>) ou les <strong>contacts racine</strong> (<code>parent_id=False</code>). Les adresses fille (facturation/expédition) ne sont <strong>jamais</strong> listées.</li>
+  <li><em>Périmètre LP</em> (priorité Odoo 18)&nbsp;:
     <ul>
-      <li><em>Sociétés</em> : affichées même sans ventes si la LP est explicitement affectée (direct/via enfant).</li>
-      <li><em>Personnes racine</em> : affichées uniquement si au moins une <strong>ligne de vente</strong> (commande ≠ cancel)
-          où elles figurent en client/facturation/livraison.</li>
-      <li><em>Adresses d’expédition/facturation</em> : jamais affichées.</li>
+      <li>si le champ <code>specific_property_product_pricelist</code> existe : afficher si<br>
+        <code>specific_property_product_pricelist = pricelist_id</code> <strong>OU</strong>
+        (<code>specific_property_product_pricelist</code> vide <strong>ET</strong> <code>property_product_pricelist = pricelist_id</code>).
+      </li>
+      <li>sinon : afficher si <code>property_product_pricelist = pricelist_id</code>.</li>
     </ul>
+  </li>
+  <li><em>Multi-sociétés</em> : la résolution des champs dépendants de société suit <code>allowed_company_ids</code> (contexte injecté depuis la LP).</li>
+</ul>
 
-  </div>
+<h3>Boutons ajoutés</h3>
+<ul>
+  <li><em>Vue formulaire LP</em> : smart button « Clients » (<code>oe_stat_button</code> + <code>statinfo</code>, icône <code>fa-user</code>, compteur <code>customers_count</code>).</li>
+  <li><em>Vue liste LP</em> (<code>product.product_pricelist_view_tree</code>) : bouton « Clients » en <strong>fin de ligne</strong>, <code>type="object"</code>, <code>class="btn-link"</code>, <code>icon="fa-user"</code>.</li>
+</ul>
+
+<h3>Compatibilité</h3>
+<ul>
+  <li>Odoo 18 : plus d’<code>ir.property</code> ; les champs dépendants de société sont stockés en JSON et résolus via le contexte de société.</li>
+  <li>Types de vue : utiliser <code>list</code> (remplace <code>tree</code>), sinon erreur « View types not defined tree ».</li>
+</ul>
 
 
   <div class="oe_row oe_spaced">
@@ -47,4 +57,3 @@
   </div>
 
 </section>
-
